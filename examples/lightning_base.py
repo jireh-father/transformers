@@ -123,11 +123,11 @@ class BaseTransformer(pl.LightningModule):
             #     config=self.config,
             #     cache_dir=cache_dir,
             # )
-            self.model = self.model_type(
-                self.hparams.model_name_or_path,
+            self.model = self.model_type.from_config(
+                # self.hparams.model_name_or_path,
                 # from_tf=bool(".ckpt" in self.hparams.model_name_or_path),
-                # config=self.config,
-                cache_dir=cache_dir,
+                config=self.config,
+                # cache_dir=cache_dir,
             )
             print(self.model)
         else:
