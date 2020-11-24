@@ -38,8 +38,11 @@ def generate_summaries_or_translations(
     if fp16:
         model = model.half()
 
-    print(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+    except:
+        import os
+        tokenizer = AutoTokenizer.from_pretrained(os.path.basename(os.path.dirname(model_name)))
     logger.info(f"Inferred tokenizer type: {tokenizer.__class__}")  # if this is wrong, check config.model_type.
 
     start_time = time.time()
