@@ -38,11 +38,9 @@ from utils import (
     use_task_specific_params,
 )
 
-
 # need the parent dir module
 sys.path.insert(2, str(Path(__file__).resolve().parents[1]))
 from lightning_base import BaseTransformer, add_generic_args, generic_train  # noqa
-
 
 logger = logging.getLogger(__name__)
 
@@ -305,28 +303,28 @@ class SummarizationModule(BaseTransformer):
             default=1024,
             type=int,
             help="The maximum total input sequence length after tokenization. Sequences longer "
-            "than this will be truncated, sequences shorter will be padded.",
+                 "than this will be truncated, sequences shorter will be padded.",
         )
         parser.add_argument(
             "--max_target_length",
             default=56,
             type=int,
             help="The maximum total input sequence length after tokenization. Sequences longer "
-            "than this will be truncated, sequences shorter will be padded.",
+                 "than this will be truncated, sequences shorter will be padded.",
         )
         parser.add_argument(
             "--val_max_target_length",
             default=142,  # these defaults are optimized for CNNDM. For xsum, see README.md.
             type=int,
             help="The maximum total input sequence length after tokenization. Sequences longer "
-            "than this will be truncated, sequences shorter will be padded.",
+                 "than this will be truncated, sequences shorter will be padded.",
         )
         parser.add_argument(
             "--test_max_target_length",
             default=142,
             type=int,
             help="The maximum total input sequence length after tokenization. Sequences longer "
-            "than this will be truncated, sequences shorter will be padded.",
+                 "than this will be truncated, sequences shorter will be padded.",
         )
         parser.add_argument("--freeze_encoder", action="store_true")
         parser.add_argument("--freeze_embeds", action="store_true")
@@ -356,6 +354,10 @@ class SummarizationModule(BaseTransformer):
             required=False,
             help="-1 means never early stop. early_stopping_patience is measured in validation checks, not epochs. So val_check_interval will effect it.",
         )
+
+        parser.add_argument("--tokenizer_name", type=str, default="", required=False)
+        parser.add_argument("--vocab_file", type=str, default="", required=False)
+
         return parser
 
 
@@ -385,10 +387,10 @@ def main(args, model=None) -> SummarizationModule:
             model: SummarizationModule = TranslationModule(args)
     dataset = Path(args.data_dir).name
     if (
-        args.logger_name == "default"
-        or args.fast_dev_run
-        or str(args.output_dir).startswith("/tmp")
-        or str(args.output_dir).startswith("/var")
+            args.logger_name == "default"
+            or args.fast_dev_run
+            or str(args.output_dir).startswith("/tmp")
+            or str(args.output_dir).startswith("/var")
     ):
         logger = True  # don't pollute wandb logs unnecessarily
     elif args.logger_name == "wandb":
@@ -440,5 +442,8 @@ if __name__ == "__main__":
     parser = SummarizationModule.add_model_specific_args(parser, os.getcwd())
 
     args = parser.parse_args()
+
+    for arg in vars(args):
+        print(arg, getattr(args, arg))
 
     main(args)

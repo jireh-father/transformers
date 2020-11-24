@@ -31,7 +31,6 @@ from transformers.optimization import (
     get_polynomial_decay_schedule_with_warmup,
 )
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -57,7 +56,6 @@ MODEL_MODES = {
     "translation": AutoModelForSeq2SeqLM,
 }
 
-
 # update this and the import above to support new schedulers from transformers.optimization
 arg_to_scheduler = {
     "linear": get_linear_schedule_with_warmup,
@@ -73,14 +71,14 @@ arg_to_scheduler_metavar = "{" + ", ".join(arg_to_scheduler_choices) + "}"
 
 class BaseTransformer(pl.LightningModule):
     def __init__(
-        self,
-        hparams: argparse.Namespace,
-        num_labels=None,
-        mode="base",
-        config=None,
-        tokenizer=None,
-        model=None,
-        **config_kwargs
+            self,
+            hparams: argparse.Namespace,
+            num_labels=None,
+            mode="base",
+            config=None,
+            tokenizer=None,
+            model=None,
+            **config_kwargs
     ):
         """Initialize a model, tokenizer and config."""
         super().__init__()
@@ -109,10 +107,15 @@ class BaseTransformer(pl.LightningModule):
                 setattr(self.config, p, getattr(self.hparams, p))
 
         if tokenizer is None:
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.hparams.tokenizer_name if self.hparams.tokenizer_name else self.hparams.model_name_or_path,
-                cache_dir=cache_dir,
-            )
+            if self.hparams.tokenizer_name and self.hparams.tokenizer_name == "t5" and self.hparams.vocab_file:
+                from transformers import T5TokenizerFast
+                self.tokenizer = T5TokenizerFast(self.hparams.vocab_file)
+                print("custom tokenizer", self.tokenizer)
+            else:
+                self.tokenizer = AutoTokenizer.from_pretrained(
+                    self.hparams.tokenizer_name if self.hparams.tokenizer_name else self.hparams.model_name_or_path,
+                    cache_dir=cache_dir,
+                )
         else:
             self.tokenizer: PreTrainedTokenizer = tokenizer
         self.model_type = MODEL_MODES[mode]
@@ -331,7 +334,7 @@ def add_generic_args(parser, root_dir) -> None:
         type=str,
         default="O2",
         help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3']."
-        "See details at https://nvidia.github.io/apex/amp.html",
+             "See details at https://nvidia.github.io/apex/amp.html",
     )
     parser.add_argument("--n_tpu_cores", dest="tpu_cores", type=int)
     parser.add_argument("--max_grad_norm", dest="gradient_clip_val", default=1.0, type=float, help="Max gradient norm")
@@ -355,14 +358,14 @@ def add_generic_args(parser, root_dir) -> None:
 
 
 def generic_train(
-    model: BaseTransformer,
-    args: argparse.Namespace,
-    early_stopping_callback=None,
-    logger=True,  # can pass WandbLogger() here
-    extra_callbacks=[],
-    checkpoint_callback=None,
-    logging_callback=None,
-    **extra_train_kwargs
+        model: BaseTransformer,
+        args: argparse.Namespace,
+        early_stopping_callback=None,
+        logger=True,  # can pass WandbLogger() here
+        extra_callbacks=[],
+        checkpoint_callback=None,
+        logging_callback=None,
+        **extra_train_kwargs
 ):
     pl.seed_everything(args.seed)
 
