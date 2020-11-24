@@ -112,6 +112,11 @@ class BaseTransformer(pl.LightningModule):
                 print(self.hparams.vocab_file)
                 self.tokenizer = T5TokenizerFast(self.hparams.vocab_file)
                 print("custom tokenizer", self.tokenizer)
+            elif self.hparams.tokenizer_name and self.hparams.tokenizer_name == "pegasus" and self.hparams.vocab_file:
+                from transformers import PegasusTokenizerFast
+                print(self.hparams.vocab_file)
+                self.tokenizer = PegasusTokenizerFast(self.hparams.vocab_file)
+                print("custom tokenizer", self.tokenizer)
             else:
                 self.tokenizer = AutoTokenizer.from_pretrained(
                     self.hparams.tokenizer_name if self.hparams.tokenizer_name else self.hparams.model_name_or_path,
