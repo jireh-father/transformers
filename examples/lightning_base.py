@@ -109,6 +109,7 @@ class BaseTransformer(pl.LightningModule):
         if tokenizer is None:
             if self.hparams.tokenizer_name and self.hparams.tokenizer_name == "t5" and self.hparams.vocab_file:
                 from transformers import T5TokenizerFast
+                print(self.hparams.vocab_file)
                 self.tokenizer = T5TokenizerFast(self.hparams.vocab_file)
                 print("custom tokenizer", self.tokenizer)
             else:
