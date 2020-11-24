@@ -61,6 +61,7 @@ def generate_summaries_or_translations(
         )
         dec = tokenizer.batch_decode(summaries, skip_special_tokens=True, clean_up_tokenization_spaces=False)
         for hypothesis in dec:
+            print(hypothesis)
             fout.write(hypothesis + "\n")
             fout.flush()
     fout.close()
