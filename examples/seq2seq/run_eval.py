@@ -42,6 +42,7 @@ def generate_summaries_or_translations(
         tokenizer = AutoTokenizer.from_pretrained(model_name)
     except:
         import os
+        print(os.path.basename(os.path.dirname(model_name)))
         tokenizer = AutoTokenizer.from_pretrained(os.path.basename(os.path.dirname(model_name)))
     logger.info(f"Inferred tokenizer type: {tokenizer.__class__}")  # if this is wrong, check config.model_type.
 
