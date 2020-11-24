@@ -113,9 +113,6 @@ class BaseTransformer(pl.LightningModule):
                 self.hparams.tokenizer_name if self.hparams.tokenizer_name else self.hparams.model_name_or_path,
                 cache_dir=cache_dir,
             )
-            print(self.hparams.tokenizer_name if self.hparams.tokenizer_name else self.hparams.model_name_or_path)
-            print(cache_dir)
-            print("tokenizer", self.tokenizer)
         else:
             self.tokenizer: PreTrainedTokenizer = tokenizer
         self.model_type = MODEL_MODES[mode]
