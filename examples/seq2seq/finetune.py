@@ -54,6 +54,8 @@ class SummarizationModule(BaseTransformer):
     default_val_metric = "rouge2"
 
     def __init__(self, hparams, **kwargs):
+        print(kwargs)
+        print(hparams)
         if hparams.sortish_sampler and hparams.gpus > 1:
             hparams.replace_sampler_ddp = False
         elif hparams.max_tokens_per_batch is not None:
