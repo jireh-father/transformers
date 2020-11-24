@@ -15,23 +15,21 @@ from tqdm import tqdm
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from utils import calculate_bleu, calculate_rouge, chunks, parse_numeric_n_bool_cl_kwargs, use_task_specific_params
 
-
 logger = getLogger(__name__)
-
 
 DEFAULT_DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 def generate_summaries_or_translations(
-    examples: List[str],
-    out_file: str,
-    model_name: str,
-    batch_size: int = 8,
-    device: str = DEFAULT_DEVICE,
-    fp16=False,
-    task="summarization",
-    prefix=None,
-    **generate_kwargs,
+        examples: List[str],
+        out_file: str,
+        model_name: str,
+        batch_size: int = 8,
+        device: str = DEFAULT_DEVICE,
+        fp16=False,
+        task="summarization",
+        prefix=None,
+        **generate_kwargs,
 ) -> Dict:
     """Save model.generate results to <out_file>, and return how long it took."""
     fout = Path(out_file).open("w", encoding="utf-8")
@@ -40,6 +38,7 @@ def generate_summaries_or_translations(
     if fp16:
         model = model.half()
 
+    print(model_name)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     logger.info(f"Inferred tokenizer type: {tokenizer.__class__}")  # if this is wrong, check config.model_type.
 
