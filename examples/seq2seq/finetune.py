@@ -355,7 +355,7 @@ class SummarizationModule(BaseTransformer):
             help="-1 means never early stop. early_stopping_patience is measured in validation checks, not epochs. So val_check_interval will effect it.",
         )
 
-        parser.add_argument("--tokenizer_name", type=str, default="", required=False)
+        # parser.add_argument("--tokenizer_name", type=str, default="", required=False)
         parser.add_argument("--vocab_file", type=str, default="", required=False)
 
         return parser
