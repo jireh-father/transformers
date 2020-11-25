@@ -31,6 +31,7 @@ def generate_summaries_or_translations(
         prefix=None,
         tokenizer_name=None,
         vocab_file=None,
+        max_length=None,
         **generate_kwargs,
 ) -> Dict:
     """Save model.generate results to <out_file>, and return how long it took."""
@@ -66,7 +67,8 @@ def generate_summaries_or_translations(
         prefix = prefix or getattr(model.config, "prefix", "") or ""
     for examples_chunk in tqdm(list(chunks(examples, batch_size))):
         examples_chunk = [prefix + text for text in examples_chunk]
-        batch = tokenizer(examples_chunk, return_tensors="pt", truncation=True, padding="longest").to(device)
+        batch = tokenizer(examples_chunk, return_tensors="pt", truncation=True, padding="longest",
+                          max_length=max_length).to(device)
         print(len(batch.input_ids))
         print(batch.input_ids.shape)
         summaries = model.generate(
@@ -120,6 +122,8 @@ def run_generate(verbose=True):
     parser.add_argument(
         "--n_obs", type=int, default=-1, required=False, help="How many observations. Defaults to all."
     )
+    parser.add_argument("--max_length", type=int, default=512, required=False, help="batch size")
+
     parser.add_argument("--fp16", action="store_true")
     parser.add_argument("--vocab_file", type=str, default="", required=False)
     parser.add_argument("--tokenizer_name", type=str, default="", required=False)
@@ -153,6 +157,7 @@ def run_generate(verbose=True):
         prefix=args.prefix,
         tokenizer_name=args.tokenizer_name,
         vocab_file=args.vocab_file,
+        max_length=args.max_length,
         **parsed_args,
     )
 
