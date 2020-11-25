@@ -69,8 +69,6 @@ def generate_summaries_or_translations(
         examples_chunk = [prefix + text for text in examples_chunk]
         batch = tokenizer(examples_chunk, return_tensors="pt", truncation=True, padding="longest",
                           max_length=max_length).to(device)
-        print(len(batch.input_ids))
-        print(batch.input_ids.shape)
         summaries = model.generate(
             input_ids=batch.input_ids,
             attention_mask=batch.attention_mask,
