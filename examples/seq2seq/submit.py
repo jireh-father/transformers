@@ -11,7 +11,7 @@ def main(args):
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    summaries = open(args.generated_file).readlines()
+    summaries = [s.replace('\n', '') for s in open(args.generated_file).readlines()]
     ids = []
     with jsonlines.open(args.test_file) as f:
         for i, line in enumerate(f.iter()):
