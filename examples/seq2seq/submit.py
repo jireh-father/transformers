@@ -18,11 +18,12 @@ def main(args):
             ids.append(line['id'])
 
     rows = zip(ids, summaries)
-    with open(os.path.join("submission.csv"), "w+") as f:
+    with open(os.path.join(args.output_dir, "submission.csv"), "w+") as f:
         writer = csv.writer(f)
         writer.writerow(["id", "summary"])
         for row in rows:
             writer.writerow(row)
+
     print("done")
 
 
