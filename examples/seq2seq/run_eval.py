@@ -29,6 +29,8 @@ def generate_summaries_or_translations(
         fp16=False,
         task="summarization",
         prefix=None,
+        tokenizer_name=None,
+        vocab_file=None,
         **generate_kwargs,
 ) -> Dict:
     """Save model.generate results to <out_file>, and return how long it took."""
@@ -38,12 +40,23 @@ def generate_summaries_or_translations(
     if fp16:
         model = model.half()
 
-    try:
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-    except:
-        import os
-        print(os.path.basename(os.path.dirname(model_name)))
-        tokenizer = AutoTokenizer.from_pretrained(os.path.basename(os.path.dirname(model_name)))
+    if tokenizer_name and tokenizer_name == "t5" and vocab_file:
+        from transformers import T5TokenizerFast
+        print(vocab_file)
+        tokenizer = T5TokenizerFast(vocab_file)
+        print("custom tokenizer", tokenizer)
+    elif tokenizer_name and tokenizer_name == "pegasus" and vocab_file:
+        from transformers import PegasusTokenizerFast
+        print(vocab_file)
+        tokenizer = PegasusTokenizerFast(vocab_file)
+        print("custom tokenizer", tokenizer)
+    else:
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(model_name)
+        except:
+            import os
+            print(os.path.basename(os.path.dirname(model_name)))
+            tokenizer = AutoTokenizer.from_pretrained(os.path.basename(os.path.dirname(model_name)))
     logger.info(f"Inferred tokenizer type: {tokenizer.__class__}")  # if this is wrong, check config.model_type.
 
     start_time = time.time()
@@ -106,6 +119,8 @@ def run_generate(verbose=True):
         "--n_obs", type=int, default=-1, required=False, help="How many observations. Defaults to all."
     )
     parser.add_argument("--fp16", action="store_true")
+    parser.add_argument("--vocab_file", type=str, default="", required=False)
+    parser.add_argument("--tokenizer_name", type=str, default="", required=False)
     parser.add_argument("--dump-args", action="store_true", help="print the custom hparams with the results")
     parser.add_argument(
         "--info",
@@ -134,6 +149,8 @@ def run_generate(verbose=True):
         fp16=args.fp16,
         task=args.task,
         prefix=args.prefix,
+        tokenizer_name=args.tokenizer_name,
+        vocab_file=args.vocab_file,
         **parsed_args,
     )
 
