@@ -41,12 +41,12 @@ def generate_summaries_or_translations(
         model = model.half()
 
     if tokenizer_name and tokenizer_name == "t5" and vocab_file:
-        from transformers import T5TokenizerFast
+        from transformers import T5TokenizerFast, T5Tokenizer
         print(vocab_file)
         tokenizer = T5TokenizerFast(vocab_file)
         print("custom tokenizer", tokenizer)
     elif tokenizer_name and tokenizer_name == "pegasus" and vocab_file:
-        from transformers import PegasusTokenizerFast
+        from transformers import PegasusTokenizerFast, PegasusTokenizer
         print(vocab_file)
         tokenizer = PegasusTokenizerFast(vocab_file)
         print("custom tokenizer", tokenizer)
@@ -67,6 +67,7 @@ def generate_summaries_or_translations(
     for examples_chunk in tqdm(list(chunks(examples, batch_size))):
         examples_chunk = [prefix + text for text in examples_chunk]
         batch = tokenizer(examples_chunk, return_tensors="pt", truncation=True, padding="longest").to(device)
+        print(batch.shape)
         summaries = model.generate(
             input_ids=batch.input_ids,
             attention_mask=batch.attention_mask,
