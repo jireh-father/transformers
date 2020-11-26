@@ -12,10 +12,10 @@ def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
 
     if args.replace_special_chars:
-        summaries = [s.replace('\n', '').replace('<unk>', '').replace('</s>', '') for s in
+        summaries = [s.replace('\n', '').replace('<unk>', '').replace('</s>', '').strip() for s in
                      open(args.generated_file).readlines()]
     else:
-        summaries = [s.replace('\n', '') for s in open(args.generated_file).readlines()]
+        summaries = [s.replace('\n', '').strip() for s in open(args.generated_file).readlines()]
     ids = []
     with jsonlines.open(args.test_file) as f:
         for i, line in enumerate(f.iter()):
