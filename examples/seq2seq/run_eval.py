@@ -69,7 +69,7 @@ def generate_summaries_or_translations(
         examples_chunk = [prefix + text for text in examples_chunk]
         batch = tokenizer(examples_chunk, return_tensors="pt", truncation=True, padding="longest",
                           max_length=max_length).to(device)
-        print(tokenizer('<s></s><unk>'))
+        print(tokenizer.tokenize('<s></s><unk>'))
         sys.exit()
         summaries = model.generate(
             input_ids=batch.input_ids,
