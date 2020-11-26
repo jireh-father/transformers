@@ -72,12 +72,17 @@ def generate_summaries_or_translations(
         summaries = model.generate(
             input_ids=batch.input_ids,
             attention_mask=batch.attention_mask,
+            max_length=128,
+            num_beams=1,
+            no_repeat_ngram_size=2,
+            num_return_sequences=1,  # 다섯 개의 문장을 리턴
+            early_stopping=True
             # do_sample=True,  # 샘플링 전략 사용
             # max_length=128,  # 최대 디코딩 길이는 50
             # top_k=50,  # 확률 순위가 50위 밖인 토큰은 샘플링에서 제외
             # top_p=0.95,  # 누적 확률이 95%인 후보집합에서만 생성
             # num_return_sequences=1  # 3개의 결과를 디코딩해낸다
-            **generate_kwargs,
+            # **generate_kwargs,
         )
         print(summaries)
         dec = tokenizer.batch_decode(summaries, skip_special_tokens=True, clean_up_tokenization_spaces=False)
