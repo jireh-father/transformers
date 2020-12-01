@@ -78,7 +78,12 @@ def generate_summaries_or_translations(
             # no_repeat_ngram_size=2,
             # num_return_sequences=1,  # 다섯 개의 문장을 리턴
             # early_stopping=True,
+            num_beams=4,
+            bos_token_id=1,
             eos_token_id=2,
+            length_penalty=2.0,
+            decoder_start_token_id=1,
+            no_repeat_ngram_size=3,
             do_sample=True,  # 샘플링 전략 사용
             max_length=128,  # 최대 디코딩 길이는 50
             top_k=50,  # 확률 순위가 50위 밖인 토큰은 샘플링에서 제외
