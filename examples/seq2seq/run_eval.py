@@ -62,7 +62,7 @@ def generate_summaries_or_translations(
 
     start_time = time.time()
     # update config with task specific params
-    use_task_specific_params(model, task)
+    # use_task_specific_params(model, task)
     if prefix is None:
         prefix = prefix or getattr(model.config, "prefix", "") or ""
     for examples_chunk in tqdm(list(chunks(examples, batch_size))):
