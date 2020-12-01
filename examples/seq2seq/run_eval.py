@@ -78,9 +78,10 @@ def generate_summaries_or_translations(
             # no_repeat_ngram_size=2,
             # num_return_sequences=1,  # 다섯 개의 문장을 리턴
             # early_stopping=True,
-            num_beams=4,
+            # num_beams=4,
             bos_token_id=1,
             eos_token_id=2,
+            pad_token_id=3,
             length_penalty=2.0,
             decoder_start_token_id=1,
             no_repeat_ngram_size=3,
