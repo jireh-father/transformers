@@ -2,3 +2,4 @@ gitpython
 rouge_score
 sacrebleu
 pytorch_lightning
+jsonlines

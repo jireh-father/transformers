@@ -71,7 +71,7 @@ class SummarizationModule(BaseTransformer):
         self.step_count = 0
         self.metrics = defaultdict(list)
         self.model_type = self.config.model_type
-        self.vocab_size = self.config.tgt_vocab_size if self.model_type == "fsmt" else self.config.vocab_size
+        self.vocab_size = hparams.vocab_size#self.config.tgt_vocab_size if self.model_type == "fsmt" else self.config.vocab_size
         # self.vocab_size = self.config.tgt_vocab_size if self.model_type == "fsmt" else self.config.vocab_size
 
         self.dataset_kwargs: dict = dict(
@@ -358,6 +358,7 @@ class SummarizationModule(BaseTransformer):
 
         # parser.add_argument("--tokenizer_name", type=str, default="", required=False)
         parser.add_argument("--vocab_file", type=str, default="", required=False)
+        parser.add_argument("--vocab_size", type=int, default=8000, required=False)
 
         return parser
 
