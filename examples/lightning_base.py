@@ -98,6 +98,7 @@ class BaseTransformer(pl.LightningModule):
                 **config_kwargs,
             )
             print("pretrained", self.config)
+            sys.exit()
             if self.hparams.tokenizer_name == "t5":
                 self.config.vocab_size = hparams.vocab_size
                 self.config.decoder_start_token_id = 1
