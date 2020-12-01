@@ -97,8 +97,11 @@ class BaseTransformer(pl.LightningModule):
                 cache_dir=cache_dir,
                 **config_kwargs,
             )
-            self.config.vocab_size = hparams.vocab_size
-            print("pretrained", )
+            if self.hparams.tokenizer_name == "t5":
+                self.config.vocab_size = hparams.vocab_size
+                self.config.decoder_start_token_id = 1
+                self.config.eos_token_id = 2
+            print("pretrained", self.config)
         else:
             self.config: PretrainedConfig = config
 
