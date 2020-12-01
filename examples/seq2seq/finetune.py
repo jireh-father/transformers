@@ -72,6 +72,7 @@ class SummarizationModule(BaseTransformer):
         self.metrics = defaultdict(list)
         self.model_type = self.config.model_type
         self.vocab_size = self.config.tgt_vocab_size if self.model_type == "fsmt" else self.config.vocab_size
+        # self.vocab_size = self.config.tgt_vocab_size if self.model_type == "fsmt" else self.config.vocab_size
 
         self.dataset_kwargs: dict = dict(
             data_dir=self.hparams.data_dir,

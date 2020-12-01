@@ -97,6 +97,7 @@ class BaseTransformer(pl.LightningModule):
                 cache_dir=cache_dir,
                 **config_kwargs,
             )
+            print("pretrained", self.config)
         else:
             self.config: PretrainedConfig = config
 
@@ -108,12 +109,12 @@ class BaseTransformer(pl.LightningModule):
 
         if tokenizer is None:
             if self.hparams.tokenizer_name and self.hparams.tokenizer_name == "t5" and self.hparams.vocab_file:
-                from transformers import T5TokenizerFast
+                from transformers import T5TokenizerFast, T5Tokenizer
                 print(self.hparams.vocab_file)
                 self.tokenizer = T5TokenizerFast(self.hparams.vocab_file)
                 print("custom tokenizer", self.tokenizer)
             elif self.hparams.tokenizer_name and self.hparams.tokenizer_name == "pegasus" and self.hparams.vocab_file:
-                from transformers import PegasusTokenizerFast
+                from transformers import PegasusTokenizerFast, PegasusTokenizer
                 print(self.hparams.vocab_file)
                 self.tokenizer = PegasusTokenizerFast(self.hparams.vocab_file)
                 print("custom tokenizer", self.tokenizer)
@@ -132,6 +133,7 @@ class BaseTransformer(pl.LightningModule):
             #     config=self.config,
             #     cache_dir=cache_dir,
             # )
+            print(self.config)
             self.model = self.model_type.from_config(
                 # self.hparams.model_name_or_path,
                 # from_tf=bool(".ckpt" in self.hparams.model_name_or_path),
