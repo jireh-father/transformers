@@ -97,8 +97,8 @@ class BaseTransformer(pl.LightningModule):
                 cache_dir=cache_dir,
                 **config_kwargs,
             )
-            self.config["vocab_size"] = hparams.vocab_size
-            print("pretrained", self.config)
+            self.config.vocab_size = hparams.vocab_size
+            print("pretrained", )
         else:
             self.config: PretrainedConfig = config
 
