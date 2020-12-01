@@ -44,12 +44,12 @@ def generate_summaries_or_translations(
     if tokenizer_name and tokenizer_name == "t5" and vocab_file:
         from transformers import T5TokenizerFast, T5Tokenizer
         print(vocab_file)
-        tokenizer = T5TokenizerFast(vocab_file)
+        tokenizer = T5Tokenizer(vocab_file)
         print("custom tokenizer", tokenizer)
     elif tokenizer_name and tokenizer_name == "pegasus" and vocab_file:
         from transformers import PegasusTokenizerFast, PegasusTokenizer
         print(vocab_file)
-        tokenizer = PegasusTokenizerFast(vocab_file)
+        tokenizer = PegasusTokenizer(vocab_file)
         print("custom tokenizer", tokenizer)
     else:
         try:
