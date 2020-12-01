@@ -81,7 +81,7 @@ def generate_summaries_or_translations(
             # num_beams=4,
             bos_token_id=1,
             eos_token_id=2,
-            pad_token_id=3,
+            pad_token_id=0,
             length_penalty=2.0,
             decoder_start_token_id=1,
             no_repeat_ngram_size=3,
